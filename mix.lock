@@ -1,0 +1,8 @@
+%{
+  "currying": {:hex, :currying, "1.0.3", "6d036c86c38663a795858c9e744e406a62d7e5a66243a7da15326e731cdcd672", [:mix], [], "hexpm", "7b9b8cd644ecac635f0abf6267ca46d497e73144a5882449a843461a014f1154"},
+  "elixir_uuid": {:hex, :elixir_uuid, "1.2.1", "dce506597acb7e6b0daeaff52ff6a9043f5919a4c3315abb4143f0b00378c097", [:mix], [], "hexpm", "f7eba2ea6c3555cea09706492716b0d87397b88946e6380898c2889d68585752"},
+  "stream_data": {:hex, :stream_data, "1.2.0", "58dd3f9e88afe27dc38bef26fce0c84a9e7a96772b2925c7b32cd2435697a52b", [:mix], [], "hexpm", "eb5c546ee3466920314643edf68943a5b14b32d1da9fe01698dc92b73f89a9ed"},
+  "type_resolver": {:hex, :type_resolver, "0.1.7", "9a23dd5b449348f55be5cf9cc74317a95c2ea1f4cb13ed75ae93ac2ccb75f9c6", [:mix], [{:typed_struct, "~> 0.3.0", [hex: :typed_struct, repo: "hexpm", optional: false]}], "hexpm", "98d712f715054a5ae1b1ed1718e26037163f76efaf356c418268366fe6848b30"},
+  "typed_struct": {:hex, :typed_struct, "0.3.0", "939789e3c1dca39d7170c87f729127469d1315dcf99fee8e152bb774b17e7ff7", [:mix], [], "hexpm", "c50bd5c3a61fe4e198a8504f939be3d3c85903b382bde4865579bc23111d1b6d"},
+  "validixir": {:hex, :validixir, "1.2.4", "de6bb79905a43d5a7dd3f140f204c34d69c5a4d37e5c1c92a5d6f8af34db2010", [:mix], [{:currying, "~> 1.0.3", [hex: :currying, repo: "hexpm", optional: false]}], "hexpm", "7ef4408a2f24b8c9aa9bf46a4e862f85d3234ca3cf257708ef743598ceeeaff2"},
+}
