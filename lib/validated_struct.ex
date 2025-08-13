@@ -173,7 +173,7 @@ defmodule ValidatedStruct do
     check_invariants!(opts)
 
     quote do
-      @before_compile {ValidatedStruct.Constructor, :expand}
+      @before_compile {ValidatedStruct.Internal.Constructor, :expand}
 
       # setting up env for Constructor.expand
       Module.register_attribute(__MODULE__, :field_type_mapping, accumulate: true)

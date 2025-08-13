@@ -4,7 +4,7 @@ defmodule ValidatedStruct.Validations do
   alias ValidatedStruct
   alias ValidatedStruct.Error
   alias ValidatedStruct.Failure
-  alias ValidatedStruct.Mappings
+  alias ValidatedStruct.Internal.Mappings
   alias ValidatedStruct.Success
 
   def failure(candidate, error_msg) do
@@ -236,7 +236,9 @@ defmodule ValidatedStruct.Validations do
     |> ValidatedStruct.map_failure(fn error -> Error.with_message(error, :not_nil) end)
   end
 
-  def not_nil(val) when is_nil(val), do: ValidatedStruct.failure_from_error(val, :is_nil, __MODULE__)
+  def not_nil(val) when is_nil(val),
+    do: ValidatedStruct.failure_from_error(val, :is_nil, __MODULE__)
+
   def not_nil(val), do: ValidatedStruct.pure(val)
 
   def boolean(c, bool) do
@@ -260,7 +262,8 @@ defmodule ValidatedStruct.Validations do
         success(c)
 
       _ ->
-        failure(c, {:expected_size, size}) |> ValidatedStruct.augment_messages(:not_a_sized_bitstring)
+        failure(c, {:expected_size, size})
+        |> ValidatedStruct.augment_messages(:not_a_sized_bitstring)
     end
   end
 
@@ -270,7 +273,8 @@ defmodule ValidatedStruct.Validations do
       if c == v do
         success(c)
       else
-        failure(c, {:expected_integer, v}) |> ValidatedStruct.augment_messages(:not_expected_integer)
+        failure(c, {:expected_integer, v})
+        |> ValidatedStruct.augment_messages(:not_expected_integer)
       end
     end)
   end
@@ -280,7 +284,9 @@ defmodule ValidatedStruct.Validations do
   def fun(c, arity) when is_function(c, arity), do: success(c)
 
   def fun(c, arity),
-    do: failure(c, {:expected_arity, arity}) |> ValidatedStruct.augment_messages(:not_expected_function)
+    do:
+      failure(c, {:expected_arity, arity})
+      |> ValidatedStruct.augment_messages(:not_expected_function)
 
   def range(c, from, to) do
     integer(c)
@@ -288,7 +294,8 @@ defmodule ValidatedStruct.Validations do
       if from <= c && c <= to do
         success(c)
       else
-        failure(c, {:expected_range, from, to}) |> ValidatedStruct.augment_messages(:not_in_expected)
+        failure(c, {:expected_range, from, to})
+        |> ValidatedStruct.augment_messages(:not_in_expected)
       end
     end)
   end

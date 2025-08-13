@@ -1,8 +1,8 @@
 defmodule ValidatedStruct.Internal.Translations do
-  @moduledoc """
-  This files contains the translations of the data structures from
-  validated struct to validixir and vice versa.
-  """
+  @moduledoc !"""
+             This files contains the translations of the data structures from
+             validated struct to validixir and vice versa.
+             """
 
   alias ValidatedStruct.Error
   alias ValidatedStruct.Failure
@@ -24,7 +24,11 @@ defmodule ValidatedStruct.Internal.Translations do
 
   defimpl ValidixirWrapper.Translateable, for: Failure do
     def translate(data) do
-      data = %Failure{data | errors: Enum.map(data.errors, &ValidixirWrapper.Translateable.translate/1)}
+      data = %Failure{
+        data
+        | errors: Enum.map(data.errors, &ValidixirWrapper.Translateable.translate/1)
+      }
+
       struct(Validixir.Failure, Map.from_struct(data))
     end
   end

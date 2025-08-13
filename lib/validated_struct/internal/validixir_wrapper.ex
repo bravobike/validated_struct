@@ -1,8 +1,8 @@
 defmodule ValidatedStruct.Internal.ValidixirWrapper do
-  @moduledoc """
-  This module offers tooling to seamlessly switch between
-  the validixir and validated struct contexts
-  """
+  @moduledoc !"""
+             This module offers tooling to seamlessly switch between
+             the validixir and validated struct contexts
+             """
   alias ValidatedStruct.Internal.ValidixirWrapper.Translateable
 
   def apply_translated(foo, validation_result) do
@@ -32,6 +32,7 @@ defmodule ValidatedStruct.Internal.ValidixirWrapper do
   end
 
   defprotocol Translateable do
+    @moduledoc false
     @fallback_to_any true
     def translate(v)
   end

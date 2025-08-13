@@ -1,7 +1,7 @@
-defmodule ValidatedStruct.Mappings do
-  @moduledoc """
-    This modules maps resolved types to validations.
-  """
+defmodule ValidatedStruct.Internal.Mappings do
+  @moduledoc !"""
+               This modules maps resolved types to validations.
+             """
   alias TypeResolver.Types
   alias ValidatedStruct.Validations
 

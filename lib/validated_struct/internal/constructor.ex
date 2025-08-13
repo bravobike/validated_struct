@@ -1,4 +1,5 @@
-defmodule ValidatedStruct.Constructor do
+defmodule ValidatedStruct.Internal.Constructor do
+  @moduledoc false
   alias TypeResolver
 
   defmacro expand(_) do
@@ -6,7 +7,9 @@ defmodule ValidatedStruct.Constructor do
 
     defaults = Module.get_attribute(module, :struct_defaults)
     fields = Module.get_attribute(module, :field_type_mapping) |> Enum.reverse()
-    struct_validation = Module.get_attribute(module, :__struct_validation__) || (&ValidatedStruct.success/1)
+
+    struct_validation =
+      Module.get_attribute(module, :__struct_validation__) || (&ValidatedStruct.success/1)
 
     field_names =
       fields
@@ -32,7 +35,8 @@ defmodule ValidatedStruct.Constructor do
 
       unquote(constructor)
 
-      @spec unquote(update_name(module))(unquote(module).t(), keyword()) :: ValidatedStruct.validation_result_t(unquote(module).t())
+      @spec unquote(update_name(module))(unquote(module).t(), keyword()) ::
+              ValidatedStruct.validation_result_t(unquote(module).t())
       def unquote(update_name(module))(%unquote(module){} = s, opts) do
         Keyword.merge(
           Map.from_struct(s) |> Keyword.new(),
@@ -41,7 +45,8 @@ defmodule ValidatedStruct.Constructor do
         |> unquote(constructor_name(module))()
       end
 
-      @spec unquote(update_bang_name(module))(unquote(module).t(), keyword()) :: unquote(module).t()
+      @spec unquote(update_bang_name(module))(unquote(module).t(), keyword()) ::
+              unquote(module).t()
       def unquote(update_bang_name(module))(%unquote(module){} = s, opts) do
         case unquote(update_name(module))(s, opts) do
           {:ok, c} -> c
@@ -49,7 +54,8 @@ defmodule ValidatedStruct.Constructor do
         end
       end
 
-      @spec unquote(validate_name(module))(unquote(module).t()) :: ValidatedStruct.validation_result_t(unquote(module).t())
+      @spec unquote(validate_name(module))(unquote(module).t()) ::
+              ValidatedStruct.validation_result_t(unquote(module).t())
       def unquote(validate_name(module))(s) do
         Map.from_struct(s)
         |> Keyword.new()
@@ -142,7 +148,10 @@ defmodule ValidatedStruct.Constructor do
     quote do
       ValidatedStruct.validate(
         unquote(validation_fun),
-        Enum.map(unquote(names(field_mapping)), &Keyword.get(arg, &1, Keyword.get(unquote(defaults), &1)))
+        Enum.map(
+          unquote(names(field_mapping)),
+          &Keyword.get(arg, &1, Keyword.get(unquote(defaults), &1))
+        )
         |> Enum.zip(__validations__())
         |> Enum.zip(unquote(vars(field_mapping) |> Enum.map(&elem(&1, 0))))
         |> Enum.map(fn {{arg, v}, arg_name} ->
@@ -178,7 +187,12 @@ defmodule ValidatedStruct.Constructor do
       end
     else
       macro =
-        quote bind_quoted: [constructor_name: constructor_name, constructor_bang_name: constructor_bang_name, module: module, required_keys: required_keys] do
+        quote bind_quoted: [
+                constructor_name: constructor_name,
+                constructor_bang_name: constructor_bang_name,
+                module: module,
+                required_keys: required_keys
+              ] do
           defmacro unquote(:"#{constructor_name}_safe")(arg) do
             call = unquote(constructor_name)
             m = unquote(module)
@@ -202,7 +216,8 @@ defmodule ValidatedStruct.Constructor do
 
       [
         quote do
-          @spec unquote(constructor_name)(keyword()) :: ValidatedStruct.validation_result_t(unquote(module).t())
+          @spec unquote(constructor_name)(keyword()) ::
+                  ValidatedStruct.validation_result_t(unquote(module).t())
           def unquote(constructor_name)(arg) do
             unquote(constructor_body)
           end
@@ -262,7 +277,7 @@ defmodule ValidatedStruct.Constructor do
           end
 
         quote do
-          ValidatedStruct.Mappings.validation(unquote(t |> Macro.escape()))
+          ValidatedStruct.Internal.Mappings.validation(unquote(t |> Macro.escape()))
         end
 
       {:validation, _n, validation, _} ->
