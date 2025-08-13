@@ -26,14 +26,16 @@ be found at <https://hexdocs.pm/validated_struct>.
 
 ## Example:
 
-    defmodule Money do
-      use ValidatedStruct
+```elixir
+defmodule Money do
+  use ValidatedStruct
 
-      validatedstruct do
-          field :amount, non_neg_integer()
-          field :currency, :eur | :usd
-      end
-    end
+  validatedstruct do
+      field :amount, non_neg_integer()
+      field :currency, :eur | :usd
+  end
+end
+```
 
 The above code generates function called `make` and `update` that can be used
 to create and update structs with validation:
@@ -55,8 +57,10 @@ field at once.
 
 We can match failures using a little helper, as follows:
 
-    import ValidatedStruct.Matchers
-    {:error, failure(:amount)} = Money.make(amount: "bla", currency: :cad)
+```elixir
+import ValidatedStruct.Matchers
+{:error, failure(:amount)} = Money.make(amount: "bla", currency: :cad)
+```
 
 Each error in a failure contains the candidate that was validated, a message,
 as well as a context of the error occurance.
@@ -71,12 +75,14 @@ This results in an error in compilation, because types cannot be resolved. To ci
 this, validated struct offers a module called `ValidatedStruct.TypeExporter` which
 can be used in the module the type resides, as follows:
 
-    defmodule MyTypesModule do
-      use ValidatedStruct.TypeExporter
+```elixir
+defmodule MyTypesModule do
+  use ValidatedStruct.TypeExporter
 
-      # type that is guaranteed to be resolvable
-      @type my_type :: String.t() | nil
-    end
+  # type that is guaranteed to be resolvable
+  @type my_type :: String.t() | nil
+end
+```
 
 Using the type exporter we guarantee, that types can be resolved by validated
 struct. Note that types in modules from other umbrella apps, as well as libraries
@@ -89,10 +95,12 @@ expressivenes of specs is limited.
 To override type validation for a specific field, we can use an optional
 `validation` argument at field level:
 
-    validatedstruct do
-      field :even, integer(), validation: &Validations.validate_even/1
-      field :odd, integer(), validation: &Validations.validate_odd/1
-    end
+```elixir
+validatedstruct do
+  field :even, integer(), validation: &Validations.validate_even/1
+  field :odd, integer(), validation: &Validations.validate_odd/1
+end
+```
 
 Note that validation functions provided have arity one and need to return
 `{:ok, any()}` in case of success and `{:error, Failure.t()}` in case of
@@ -101,32 +109,36 @@ a validation failure.
 ## Cross-field validation
 
 To validate across multiple fields we can set the `struct_validation`-option as so:
+    
+```elixir
+defmodule TwoDifferentWords do
+   use ValidatedStruct
 
-    defmodule TwoDifferentWords do
-       use ValidatedStruct
+   validatedstruct struct_validation: &TwoDifferentWords.validate_two_words/1 do
+     field :first, String.t()
+     field :second, String.t()
+   end
 
-       validatedstruct struct_validation: &TwoDifferentWords.validate_two_words/1 do
-         field :first, String.t()
-         field :second, String.t()
-       end
-
-       def validate_two_words(%__MODULE__{first: first, second: second} = s) do
-         if a == b do
-           ValidatedStruct.failure_from_error(s, :words_not_different, __MODULE__)
-         else
-           {:ok, s}
-         end
-       end
-    end
+   def validate_two_words(%__MODULE__{first: first, second: second} = s) do
+     if a == b do
+       ValidatedStruct.failure_from_error(s, :words_not_different, __MODULE__)
+     else
+       {:ok, s}
+     end
+   end
+end
+```
 
 ## Macro constructors
 
 To have more robust constructors that show e.g. typos in fields at compile time,
 we can use macro constructors as follows:
 
-   require Money
+```elixir
+require Money
 
-   Money.make_safe(currency: :usd, amount: 23)
+Money.make_safe(currency: :usd, amount: 23)
+```
 
 If we now pass a field that doesn't exist we get an error at compile time.
 This is also handy in refactoring where fields are renamed.
@@ -136,12 +148,14 @@ This is also handy in refactoring where fields are renamed.
 Constructors can be renamed by passing the option to the validated struct calls
 as follows:
 
-    validatedstruct constructor: :new do
-      field :amount, non_neg_integer()
-      field :currency, :eur | :usd
-    end
+```elixir
+validatedstruct constructor: :new do
+  field :amount, non_neg_integer()
+  field :currency, :eur | :usd
+end
 
-    new(amount: 23, currency: :usd)
+new(amount: 23, currency: :usd)
+```
 
 We can change the names for the following functions:
 
@@ -166,8 +180,10 @@ and in case of a success returns the list of the validated inputs.
 
 For custom types, we can map validations directly onto them:
 
-    use ValidatedStruct.TypeExporter 
-    @validated_type non_empty_string_t :: String.t(), validation: &Validation.validate_non_empty_string/1 
+```elixir
+use ValidatedStruct.TypeExporter 
+@validated_type non_empty_string_t :: String.t(), validation: &Validation.validate_non_empty_string/1 
+```
 
 Given that, we can now use `non_empty_string_t` in a validated
 struct without always having to define field wise custom validations.
