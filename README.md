@@ -1,5 +1,8 @@
 # ValidatedStruct
 
+![Tests](https://github.com/bravobike/validated_struct/actions/workflows/main.yaml/badge.svg)
+[![Hex version badge](https://img.shields.io/hexpm/v/validated_struct.svg)](https://hex.pm/packages/validated_struct)
+
 ValidatedStruct is a library to define struct that come with built-in validation
 based on specs.
 
