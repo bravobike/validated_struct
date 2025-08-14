@@ -25,9 +25,7 @@ Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_do
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at <https://hexdocs.pm/validated_struct>.
 
-
-
-## Example:
+## Example
 
 ```elixir
 defmodule Money do
@@ -40,7 +38,7 @@ defmodule Money do
 end
 ```
 
-The above code generates function called `make` and `update` that can be used
+The above code generates functions called `make` and `update` that can be used
 to create and update structs with validation:
 
 ```elixir
@@ -72,12 +70,12 @@ as well as a context of the error occurance.
 
 ## Type resolution and type exporter
 
-To resolve the types in the specs and derive validations from it, validated struct
-relies on `Code.Typespec.fetch_specs/1` which in some circumstances doesn't work
+To resolve the types in the specs and derive validations from them, the validated struct
+relies on `Code.Typespec.fetch_specs/1`, which in some circumstances doesn't work
 as expected.
 
-This results in an error in compilation, because types cannot be resolved. To circumvent
-this, validated struct offers a module called `ValidatedStruct.TypeExporter` which
+This results in an error in compilation because types cannot be resolved. To circumvent
+this, the validated struct offers a module called `ValidatedStruct.TypeExporter`, which
 can be used in the module the type resides, as follows:
 
 ```elixir
@@ -89,16 +87,16 @@ defmodule MyTypesModule do
 end
 ```
 
-Using the type exporter we guarantee, that types can be resolved by validated
-struct. Note that types in modules from other umbrella apps, as well as libraries
+Using the type exporter, we guarantee that types can be resolved by validated
+struct. Note that types in modules from other umbrella apps, as well as libraries,
 can always be resolved (due to compiler internals).
 
 ## Overriding type validation
 
-Sometimes validation is required to cover more, than just types. Furthermore,
-expressivenes of specs is limited. 
+Sometimes validation is required to cover more than just types. Furthermore,
+expressiveness of specs is limited.
 To override type validation for a specific field, we can use an optional
-`validation` argument at field level:
+`validation` argument at the field level:
 
 ```elixir
 validatedstruct do
@@ -108,13 +106,16 @@ end
 ```
 
 Note that validation functions provided have arity one and need to return
-`{:ok, any()}` in case of success and `{:error, Failure.t()}` in case of
+`{:ok, new_value :: any()}` in case of success and `{:error, Failure.t()}` in case of
 a validation failure.
+
+In the case an `{:ok, new_value}` tuple is returned, the field will be set to
+`new_value` without further validation.
 
 ## Cross-field validation
 
-To validate across multiple fields we can set the `struct_validation`-option as so:
-    
+To validate across multiple fields, we can set the `struct_validation` option as so:
+
 ```elixir
 defmodule TwoDifferentWords do
    use ValidatedStruct
@@ -134,9 +135,14 @@ defmodule TwoDifferentWords do
 end
 ```
 
+Note that struct validation is only applied if all single field validations succeed.
+
+In the case an `{:ok, new_struct}` tuple is returned, the corresponding functions (`make`,
+`update`) will return `new_struct` without further validation.
+
 ## Macro constructors
 
-To have more robust constructors that show e.g. typos in fields at compile time,
+To have more robust constructors that show, e.g. typos in fields at compile time,
 we can use macro constructors as follows:
 
 ```elixir
@@ -145,7 +151,7 @@ require Money
 Money.make_safe(currency: :usd, amount: 23)
 ```
 
-If we now pass a field that doesn't exist we get an error at compile time.
+If we now pass a field that doesn't exist, we get an error at compile time.
 This is also handy in refactoring where fields are renamed.
 
 ## Renaming functions
@@ -175,7 +181,7 @@ We can have a private constructor by setting the option `private_constructor` to
 ## Type validation only
 
 If we don't want to have a smart constructor, we can pass the option
-`type_validation_only`. The options takes a name for the type validation
+`type_validation_only`. The option takes a name for the type validation
 function.
 
 This generates a function with the given name that only validates types
@@ -191,15 +197,11 @@ use ValidatedStruct.TypeExporter
 ```
 
 Given that, we can now use `non_empty_string_t` in a validated
-struct without always having to define field wise custom validations.
-
-## Generators
-
-See `ValidatedStruct.Generator`.
+struct without always having to define field-wise custom validations.
 
 ## Hot code reloading in releases
 
-ValidatedStruct heavily relies on debug information, which are usually stripped in
+ValidatedStruct heavily relies on debug information, which is usually stripped in
 production code.
 
 You have to add `strip_beams: [keep: ["Dbgi"]]` in your release config in
