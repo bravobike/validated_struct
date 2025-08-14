@@ -43,11 +43,13 @@ end
 The above code generates function called `make` and `update` that can be used
 to create and update structs with validation:
 
-   {:ok, money} = Money.make(amount: 10, currency: :eur)
-   {:ok, updated_money} = Money.update(acount: 11)
+```elixir
+{:ok, money} = Money.make(amount: 10, currency: :eur)
+{:ok, updated_money} = Money.update(acount: 11)
 
-   {:error, _} = Money.make(amount: 10, currency: :cad)
-   {:error, _} = Money.make(amount: "10", currency: :usd)
+{:error, _} = Money.make(amount: 10, currency: :cad)
+{:error, _} = Money.make(amount: "10", currency: :usd)
+```
 
 Fields in validated structs are always enforced.
 

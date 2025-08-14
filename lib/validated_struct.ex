@@ -19,11 +19,11 @@ defmodule ValidatedStruct do
   The above code generates function called `make` and `update` that can be used
   to create and update structs with validation:
 
-     {:ok, money} = Money.make(amount: 10, currency: :eur)
-     {:ok, updated_money} = Money.update(acount: 11)
+      {:ok, money} = Money.make(amount: 10, currency: :eur)
+      {:ok, updated_money} = Money.update(acount: 11)
 
-     {:error, _} = Money.make(amount: 10, currency: :cad)
-     {:error, _} = Money.make(amount: "10", currency: :usd)
+      {:error, _} = Money.make(amount: 10, currency: :cad)
+      {:error, _} = Money.make(amount: "10", currency: :usd)
 
   Fields in validated structs are always enforced.
 
@@ -105,9 +105,9 @@ defmodule ValidatedStruct do
   To have more robust constructors that show e.g. typos in fields at compile time,
   we can use macro constructors as follows:
 
-     require Money
+      require Money
 
-     Money.make_safe(currency: :usd, amount: 23)
+      Money.make_safe(currency: :usd, amount: 23)
 
   If we now pass a field that doesn't exist we get an error at compile time.
   This is also handy in refactoring where fields are renamed.
@@ -147,8 +147,8 @@ defmodule ValidatedStruct do
 
   For custom types, we can map validations directly onto them:
 
-      use ValidatedStruct.TypeExporter 
-      @validated_type non_empty_string_t :: String.t(), validation: &Validation.validate_non_empty_string/1 
+       use ValidatedStruct.TypeExporter 
+       @validated_type non_empty_string_t :: String.t(), validation: &Validation.validate_non_empty_string/1 
 
   Given that, we can now use `non_empty_string_t` in a validated
   struct without always having to define field wise custom validations.
