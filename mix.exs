@@ -36,7 +36,6 @@ defmodule ValidatedStruct.MixProject do
   defp deps do
     [
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
-      {:stream_data, "~> 1.0", only: [:dev, :test]},
       {:typed_struct, "~> 0.3.0"},
       {:type_resolver, "~> 0.1.7"},
       {:validixir, "~> 1.2.4"}
