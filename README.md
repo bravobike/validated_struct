@@ -15,7 +15,7 @@ by adding `validated_struct` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:validated_struct, "~> 0.1.0"}
+    {:validated_struct, "~> 0.0.2"}
   ]
 end
 ```
