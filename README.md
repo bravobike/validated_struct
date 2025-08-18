@@ -169,9 +169,9 @@ new(amount: 23, currency: :usd)
 
 We can change the names for the following functions:
 
-- constructor: renames the constructor, default is `:make`
-- update: renames the update function, default is `:update`
-- validate: renames the validation function, default is `:validate`
+- `constructor:` renames the constructor, default is `:make`
+- `update:` renames the update function, default is `:update`
+- `validate:` renames the validation function, default is `:validate`
 
 ## Setting the constructor private
 
@@ -205,3 +205,8 @@ production code.
 
 You have to add `strip_beams: [keep: ["Dbgi"]]` in your release config in
 root > mix.exs > &project/0 > releases > <release_name>
+
+
+## Generators
+
+There is a library, that adds stream data generators to validated struct. It can be found at [hex.pm](https://hex.pm/packages/validated_struct_generators).
