@@ -5,6 +5,17 @@ defmodule ValidatedStruct do
 
   ValidatedStruct is a plugin for type struct.
 
+  ## Overview
+
+  - [General Usage](pages/general_usage.md)
+  - [Adapting Validation](pages/adapting_validation.md)
+  - [Validation Return Types](pages/validation_return_types.md)
+  - [Type Resolution and Type Exporter](pages/type_resolution.md)
+  - [Validated Types](pages/validated_types.md)
+  - [Compile-Time safe Constructors](pages/compile_time_constructors.md)
+  - [Macro Expansion explained](pages/macro_expansion.md)
+  - [Validation on Steroids](pages/validation_on_steroids.md)
+
   ## Example
 
       defmodule Money do

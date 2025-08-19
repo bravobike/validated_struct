@@ -48,7 +48,30 @@ defmodule ValidatedStruct.MixProject do
       authors: ["Simon Härer, Norbert Melzer"],
       canonical: "http://hexdocs.pm/validated_struct",
       main: "ValidatedStruct",
-      source_ref: "v#{@version}"
+      source_ref: "v#{@version}",
+      extras: [
+        "pages/adapting_validation.md",
+        "pages/validation_return_types.md",
+        "pages/type_resolution.md",
+        "pages/validated_types.md",
+        "pages/compile_time_constructors.md",
+        "pages/macro_expansion.md",
+        "pages/validation_on_steroids.md"
+      ],
+      groups_for_modules: [
+        "Validation Return Types": [
+          ValidatedStruct.Success,
+          ValidatedStruct.Failure,
+          ValidatedStruct.Error,
+          ValidatedStruct.Matchers
+        ],
+        "Predefined Validations": [
+          ValidatedStruct.Validations
+        ]
+      ],
+      next_modules_by_prefix: [
+        ValidatedStruct
+      ]
     ]
   end
 
