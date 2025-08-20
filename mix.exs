@@ -50,6 +50,7 @@ defmodule ValidatedStruct.MixProject do
       main: "ValidatedStruct",
       source_ref: "v#{@version}",
       extras: [
+        "pages/general_usage.md",
         "pages/adapting_validation.md",
         "pages/validation_return_types.md",
         "pages/type_resolution.md",

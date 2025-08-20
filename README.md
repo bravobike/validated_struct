@@ -53,6 +53,8 @@ Fields in validated structs are always enforced.
 
 ## Overview
 
+<!-- MDOC !-->
+
 - [General Usage](pages/general_usage.md)
 - [Adapting Validation](pages/adapting_validation.md)
 - [Validation Return Types](pages/validation_return_types.md)
@@ -61,6 +63,8 @@ Fields in validated structs are always enforced.
 - [Compile-Time safe Constructors](pages/compile_time_constructors.md)
 - [Macro Expansion explained](pages/macro_expansion.md)
 - [Validation on Steroids](pages/validation_on_steroids.md)
+
+<!-- MDOC !-->
 
 
 ## Hot code reloading in releases

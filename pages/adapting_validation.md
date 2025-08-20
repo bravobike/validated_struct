@@ -1,8 +1,10 @@
 # Adapting Validation
 
+`ValidatedStruct` offers a variety of configuration options to adapt it to your specific needs.
+
 ## Overriding type validation
 
-Sometimes validation is required to cover more than just types. Furthermore,
+Sometimes validation is required to cover more than just types. Furthermore, the
 expressiveness of specs is limited.
 To override type validation for a specific field, we can use an optional
 `validation` argument at the field level:
@@ -15,10 +17,10 @@ end
 ```
 
 Note that validation functions provided have arity one and need to return
-`{:ok, new_value :: any()}` in case of success and `{:error, Failure.t()}` in case of
+`{:ok, new_value :: any()}` in the case of a success and `{:error, Failure.t()}` in case of
 a validation failure.
 
-In the case an `{:ok, new_value}` tuple is returned, the field will be set to
+In case an `{:ok, new_value}` tuple is returned, the field will be set to
 `new_value` without further validation.
 
 ## Cross-field validation
@@ -82,4 +84,4 @@ If we don't want to have a smart constructor, we can pass the option
 function.
 
 This generates a function with the given name that only validates types
-and in case of a success returns the list of the validated inputs.
+and in the case of a success returns the list of the validated inputs.

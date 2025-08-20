@@ -1,4 +1,4 @@
-# Compile-Time safe Constructors
+# Compile-Time-Safe Constructors
 
 To have more robust constructors that show, e.g. typos in fields at compile time,
 we can use macro constructors as follows:
