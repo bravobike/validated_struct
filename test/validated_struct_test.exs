@@ -264,4 +264,13 @@ defmodule ValidatedStructTest do
       assert {:error, %ValidatedStruct.Failure{errors: [^error]}} = ret
     end
   end
+
+  describe "defaults" do
+    test "are set as expected" do
+      {:ok, data} = Data.Default.make([])
+      assert data.world == %{}
+      assert data.bye == 123
+      assert data.hello == "123"
+    end
+  end
 end
