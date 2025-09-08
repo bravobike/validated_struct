@@ -47,4 +47,14 @@ defmodule ValidatedStructTest.Data do
       end
     end
   end
+
+  defmodule Default do
+    use ValidatedStruct
+
+    validatedstruct do
+      field(:hello, String.t(), default: "123")
+      field(:bye, integer(), default: 123)
+      field(:world, map(), default: %{})
+    end
+  end
 end

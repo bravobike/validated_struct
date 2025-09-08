@@ -113,7 +113,7 @@ defmodule ValidatedStruct do
 
     if Keyword.has_key?(opts, :default) do
       default = Keyword.get(opts, :default)
-      Module.put_attribute(mod, :struct_defaults, {name, default})
+      Module.put_attribute(mod, :struct_defaults, {name, Macro.escape(default)})
     end
 
     nil
