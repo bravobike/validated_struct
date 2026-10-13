@@ -1,11 +1,12 @@
 defmodule ValidatedStruct.Validations do
   alias TypeResolver.Types.MapFieldAssocL
   alias TypeResolver.Types.MapFieldExactL
+  alias TypeResolver.Types.UnionT
   alias ValidatedStruct
   alias ValidatedStruct.Error
   alias ValidatedStruct.Failure
   alias ValidatedStruct.Internal.Mappings
-  alias ValidatedStruct.Success
+  alias ValidatedStruct.Internal.ValidixirWrapper
 
   def failure(candidate, error_msg) do
     ValidatedStruct.failure_from_error(candidate, error_msg, ValidatedStruct)
@@ -57,16 +58,49 @@ defmodule ValidatedStruct.Validations do
     failure(c, :not_of_type_tuple)
   end
 
-  def union(c, types) do
-    res = Enum.map(types, &Mappings.validation(&1)) |> Enum.map(& &1.(c))
-    maybe_success = find_success(res)
+  def union(_c, []), do: success([])
 
-    if Success.success?(maybe_success) do
-      maybe_success
-    else
-      ValidatedStruct.sequence(res)
-      |> ValidatedStruct.map_failure(&Error.augment_message(&1, :union_type))
+  def union(c, types) do
+    case first_success(c, types, 1, []) do
+      {:ok, _} = success -> success
+      {:no_match, failures} -> union_failure(failures)
     end
+  end
+
+  defp first_success(_c, [], _depth, failures), do: {:no_match, failures}
+
+  defp first_success(c, [%UnionT{inner: [_ | _] = inner} | rest], depth, failures) do
+    case first_success(c, inner, depth + 1, failures) do
+      {:ok, _} = success -> success
+      {:no_match, failures} -> first_success(c, rest, depth, failures)
+    end
+  end
+
+  defp first_success(c, [type | rest], depth, failures) do
+    case Mappings.validation(type).(c) do
+      {:ok, _} = success -> success
+      failure -> first_success(c, rest, depth, [{failure, depth} | failures])
+    end
+  end
+
+  defp union_failure(failures) do
+    failures
+    |> Enum.reverse()
+    |> Enum.flat_map(fn {{:error, %Failure{errors: errors}}, depth} ->
+      Enum.map(errors, fn error ->
+        error |> ValidixirWrapper.translate() |> augment_union_error(depth)
+      end)
+    end)
+    |> Validixir.Failure.make()
+    |> ValidixirWrapper.translate()
+  end
+
+  defp augment_union_error(error, 0), do: error
+
+  defp augment_union_error(error, depth) do
+    error
+    |> Validixir.Error.augment_message(:union_type)
+    |> augment_union_error(depth - 1)
   end
 
   def float(c) when is_float(c), do: success(c)
@@ -309,6 +343,4 @@ defmodule ValidatedStruct.Validations do
   end
 
   def struct(c, _), do: failure(c, :not_of_type_struct)
-
-  defp find_success(list), do: Enum.find(list, &Success.success?/1)
 end
